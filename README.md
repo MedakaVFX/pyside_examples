@@ -1,0 +1,2 @@
+# pyside_examples
+PySideのサンプルコード
