@@ -58,7 +58,7 @@ class TyImageLabel(QtWidgets.QWidget):
     def contextMenu(self, point):
         menu = QtWidgets.QMenu(self)
  
-        action = QtWidgets.QAction('Menu1', self)
+        action = QtGui.QAction('Menu1', self)
         action.triggered.connect(self.menu1)
         menu.addAction(action)
 
@@ -75,6 +75,7 @@ class TyImageLabel(QtWidgets.QWidget):
 
     def leaveEvent(self, event):
         self._image_label.setLineWidth(1)
+        
     #-------------------------------------#
     # Set
     #-------------------------------------#
@@ -92,15 +93,20 @@ class TyImageLabel(QtWidgets.QWidget):
             self.setName(name)
             image = QtGui.QImage(path)
             size = self._image_label.size()
-            pixmap = QtGui.QPixmap(image.scaledToWidth(size.width(), mode=QtCore.Qt.SmoothTransformation))
-            self._image_label.setPixmap(pixmap)
+            _pixmap = QtGui.QPixmap.fromImage(image).scaled(
+                size,
+                QtCore.Qt.KeepAspectRatio,       # 縦横比を保持
+                QtCore.Qt.SmoothTransformation   # スムーズに縮小
+            )
+            self._image_label.setPixmap(_pixmap)
+
 
 
 class TyFlowScrollWidegt(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super(TyFlowScrollWidegt, self).__init__(parent)
 
-        self.layout = QtWidgets.QVBoxLayout(self)
+        self._layout = QtWidgets.QVBoxLayout(self)
 
         self.scroll = QtWidgets.QScrollArea(self)
         self.scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
@@ -110,9 +116,9 @@ class TyFlowScrollWidegt(QtWidgets.QWidget):
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
         self.scroll.setWidget(self.scrollAreaWidgetContents)
 
-        self.layout.addWidget(self.scroll)
+        self._layout.addWidget(self.scroll)
 
-        self.setLayout(self.layout)
+        self.setLayout(self._layout)
 
 
 class TyFlowLayout(QtWidgets.QLayout):
@@ -125,7 +131,6 @@ class TyFlowLayout(QtWidgets.QLayout):
         self.vSpacing = vSpacing
  
     def addItem(self, item: QtWidgets.QLayoutItem):
- 
         self.itemList.append(item)
  
     def count(self):
@@ -198,10 +203,10 @@ class SampleUI(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super(SampleUI, self).__init__(parent)
  
-        self.layout = QtWidgets.QVBoxLayout(self)
+        self._layout = QtWidgets.QVBoxLayout(self)
         
         self.widget = TyFlowScrollWidegt(self)
-        self.layout.addWidget(self.widget)
+        self._layout.addWidget(self.widget)
  
         self.flowlayout = TyFlowLayout(3, 5, 5)
         widget = self.widget.scroll.widget()
@@ -213,7 +218,7 @@ class SampleUI(QtWidgets.QWidget):
             btn.setSize(100, 50)
             self.flowlayout.addWidget(btn)
 
-        self.setLayout(self.layout)
+        self.setLayout(self._layout)
         self.resize(400, 200)
 
 if __name__ == '__main__':
