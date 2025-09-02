@@ -2,9 +2,18 @@
 Info:
     Coding: Python 3.12.4 & PySide6
     Coding by: 2024-12-16 Tatsuya Yamagishi
+    Updated: 2025-02-03
 """
 
-from PySide6.QtWidgets import QApplication, QPushButton, QVBoxLayout, QLabel, QMainWindow, QWidget
+from PySide6.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QLabel,
+    QPushButton,
+    QVBoxLayout,
+    QWidget
+)
+
 import sys
 
 class MainWindow(QMainWindow):
